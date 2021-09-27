@@ -1,3 +1,22 @@
 language: java
-sudo: false
-script: mvn clean verify
+sudo: required
+dist: trusty
+services:
+  - docker
+jdk:
+  - openjdk8
+
+git:
+  depth: false
+
+cache:
+  directories:
+    - ${HOME}/.m2
+
+stages:
+  - test
+
+jobs:
+    - stage: test
+      env: COVERITY_ONLY=true
+      install: travis_wait mvn --quiet install -DskipTests=true -Dmaven.javadoc.skip=true --batch-mode --show-version;
